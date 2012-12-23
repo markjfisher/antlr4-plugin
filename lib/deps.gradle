@@ -1,0 +1,18 @@
+repositories {
+	ivy {
+		url "/opt/ivy/repo/"
+		layout 'pattern', {
+			artifact "[organisation]/[revision]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]"
+			ivy      "[organisation]/[revision]/[module]/ivy.xml"
+		}
+	}
+	/*
+	ivy {
+		url "http://ivy-repo.e2x.co.uk:9525/"
+		layout 'pattern', {
+			artifact "[organisation]/[revision]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]"
+			ivy      "[organisation]/[revision]/[module]/ivy.xml"
+		}
+	}
+	*/
+}
