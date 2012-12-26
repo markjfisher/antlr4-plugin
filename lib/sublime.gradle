@@ -1,0 +1,18 @@
+sublimeText {
+	sublimeProjectName = "Antlr4Plugin"
+	defaultFileExcludePatterns = ['.project', '.classpath', '.pydevproject']
+	defaultFolderExcludePatterns = ['.gradle', 'bin', 'build', '.settings']
+	
+	// addDependencyProjects = true
+
+	generateSublimeJavaClasspath = true
+	generateSublimeJavaSrcpath = true
+
+	addGradleCompile = true
+
+	// addSublimeLinterConfig = true
+
+	eclipseJavaFormatterConfigFile = "/home/markf/workspace/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.core.prefs"
+	eclipseJavaFormatterSortImportsOrder = ["java", "javax", "org", "com"]
+	eclipseJavaFormatterRestoreLineEndings = true
+}
