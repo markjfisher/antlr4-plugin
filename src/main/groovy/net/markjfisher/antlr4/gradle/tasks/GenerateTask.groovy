@@ -34,6 +34,7 @@ class GenerateTask extends DefaultTask {
 	}
 
 	@TaskAction generate() {
+		def optionArgs = createOptionsArray()
 		def compileJava = project.tasks.findByPath("compileJava")
 		def addedSrcDirs = []
 		project.antlr4.sourceSets.each { srcSet ->
@@ -49,14 +50,14 @@ class GenerateTask extends DefaultTask {
 					compileJava.setSource(outdir)
 					addedSrcDirs << outdir.canonicalPath
 				}
-				def apackage = relativeDirPath.replaceAll(System.properties['file.separator'], '.')
+				def grammarPackage = relativeDirPath.replaceAll(System.properties['file.separator'], '.')
 				// run antlr tool to generate the output
 				// antlr4 -o outdir -package p 
-				println "running antlr for $file"
+				project.logger.quiet "running antlr for $file with options: -o $outdir, -package $grammarPackage, $optionArgs"
 				new ByteArrayOutputStream().withStream { stream ->
 					project.javaexec {
 						main           = "org.antlr.v4.Tool"
-						args           = ["-o", "$outdir", "-package", apackage, file.canonicalPath]
+						args           = ["-o", "$outdir", "-package", grammarPackage, optionArgs, file.canonicalPath].flatten()
 						classpath      = project.configurations.antlr4
 						standardOutput = stream
 						// jvmArgs = ""
@@ -65,6 +66,35 @@ class GenerateTask extends DefaultTask {
 			}
 		}
 	}
+
+	def createOptionsArray() {
+		def options = ["atn", "encoding", "messageFormat", "longMessages", "listener", "visitor", "depend", "warnAsError", "dbgST", "forceATN", "log"]
+		options.each { option ->
+			overrideOptionsFromCommandLine(option)
+		}
+
+		def optionArgs = []
+		if (project.antlr4.encoding != "") optionArgs << "-encoding=\"$project.antlr4.encoding\""
+		if (project.antlr4.messageFormat != "") optionArgs << "-message-format=\"$project.antlr4.messageFormat\""
+		if (Boolean.valueOf(project.antlr4.atn)) 			optionArgs << "-atn"
+		if (Boolean.valueOf(project.antlr4.longMessages)) 	optionArgs << "-long-messages"
+		if (Boolean.valueOf(project.antlr4.listener)) 		optionArgs << "-listener" else optionArgs << "-no-listener"
+		if (Boolean.valueOf(project.antlr4.visitor)) 		optionArgs << "-visitor"  else optionArgs << "-no-visitor"
+		if (Boolean.valueOf(project.antlr4.depend))			optionArgs << "-depend"
+		if (Boolean.valueOf(project.antlr4.warnAsError))	optionArgs << "-Werror"
+		if (Boolean.valueOf(project.antlr4.dbgST))			optionArgs << "-XdbgST"
+		if (Boolean.valueOf(project.antlr4.forceATN))		optionArgs << "-Xforce-atn"
+		if (Boolean.valueOf(project.antlr4.log))			optionArgs << "-Xlog"
+
+		return optionArgs
+	}
+
+	def overrideOptionsFromCommandLine(option) {
+		if(project.hasProperty(option)) {
+			project.antlr4."$option" = project."$option"
+		}
+	}
+
 
 	def calcRelativePathToSoureSet(srcSet, file) {
 		// used for creating same dir path structure as grammar

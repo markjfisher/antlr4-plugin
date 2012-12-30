@@ -1,10 +1,13 @@
 package net.markjfisher.antlr4.gradle
 
+import java.util.Map
+
 import net.markjfisher.antlr4.gradle.tasks.GenerateTask
 
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.logging.Logging
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.logging.Logging
@@ -60,4 +63,6 @@ class Antlr4Plugin implements Plugin<Project> {
 		def compileJava = project.tasks.findByPath("compileJava")
 		compileJava.dependsOn(generate)
 	}
+
+
 }
