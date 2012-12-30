@@ -21,6 +21,7 @@ buildscript {
 
 dependencies {
 	groovy "org.codehaus.groovy:groovy:1.8+"
+	compile 'org.antlr:antlr:4.0-rc-1-complete'
 	compile fileTree(
 		dir: GRADLE_LIB,
 		includes: ['**/*.jar']
