@@ -1,6 +1,5 @@
 package net.markjfisher.antlr4.gradle.tasks
 
-import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
@@ -8,7 +7,7 @@ import org.gradle.api.tasks.OutputDirectories
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
 
-class GenerateTask extends DefaultTask {
+class GenerateTask extends AntlrBaseTask {
 
 	@InputFiles getGrammars() {
 		def inputGrammars = []
@@ -68,33 +67,31 @@ class GenerateTask extends DefaultTask {
 	}
 
 	def createOptionsArray() {
-		def options = ["atn", "encoding", "messageFormat", "longMessages", "listener", "visitor", "depend", "warnAsError", "dbgST", "forceATN", "log"]
-		options.each { option ->
-			overrideOptionsFromCommandLine(option)
+		def booleanOptions = ["atn", "longMessages", "listener", "visitor", "depend", "warnAsError", "dbgST", "forceATN", "log"]
+		booleanOptions.each { option ->
+			overrideOptionsFromCommandLine(option, project.antlr4.tool)
+		}
+
+		def stringOptions = ["encoding", "messageFormat"]
+		stringOptions.each { option ->
+			overrideOptionsFromCommandLine(option, project.antlr4.tool, false)
 		}
 
 		def optionArgs = []
-		if (project.antlr4.encoding != "") optionArgs << "-encoding=\"$project.antlr4.encoding\""
-		if (project.antlr4.messageFormat != "") optionArgs << "-message-format=\"$project.antlr4.messageFormat\""
-		if (Boolean.valueOf(project.antlr4.atn)) 			optionArgs << "-atn"
-		if (Boolean.valueOf(project.antlr4.longMessages)) 	optionArgs << "-long-messages"
-		if (Boolean.valueOf(project.antlr4.listener)) 		optionArgs << "-listener" else optionArgs << "-no-listener"
-		if (Boolean.valueOf(project.antlr4.visitor)) 		optionArgs << "-visitor"  else optionArgs << "-no-visitor"
-		if (Boolean.valueOf(project.antlr4.depend))			optionArgs << "-depend"
-		if (Boolean.valueOf(project.antlr4.warnAsError))	optionArgs << "-Werror"
-		if (Boolean.valueOf(project.antlr4.dbgST))			optionArgs << "-XdbgST"
-		if (Boolean.valueOf(project.antlr4.forceATN))		optionArgs << "-Xforce-atn"
-		if (Boolean.valueOf(project.antlr4.log))			optionArgs << "-Xlog"
+		if (project.antlr4.tool.encoding != "") optionArgs << "-encoding=\"${project.antlr4.tool.encoding}\""
+		if (project.antlr4.tool.messageFormat != "") optionArgs << "-message-format=\"${project.antlr4.tool.messageFormat}\""
+		if (Boolean.valueOf(project.antlr4.tool.atn)) 			optionArgs << "-atn"
+		if (Boolean.valueOf(project.antlr4.tool.longMessages)) 	optionArgs << "-long-messages"
+		if (Boolean.valueOf(project.antlr4.tool.listener)) 		optionArgs << "-listener" else optionArgs << "-no-listener"
+		if (Boolean.valueOf(project.antlr4.tool.visitor)) 		optionArgs << "-visitor"  else optionArgs << "-no-visitor"
+		if (Boolean.valueOf(project.antlr4.tool.depend))		optionArgs << "-depend"
+		if (Boolean.valueOf(project.antlr4.tool.warnAsError))	optionArgs << "-Werror"
+		if (Boolean.valueOf(project.antlr4.tool.dbgST))			optionArgs << "-XdbgST"
+		if (Boolean.valueOf(project.antlr4.tool.forceATN))		optionArgs << "-Xforce-atn"
+		if (Boolean.valueOf(project.antlr4.tool.log))			optionArgs << "-Xlog"
 
 		return optionArgs
 	}
-
-	def overrideOptionsFromCommandLine(option) {
-		if(project.hasProperty(option)) {
-			project.antlr4."$option" = project."$option"
-		}
-	}
-
 
 	def calcRelativePathToSoureSet(srcSet, file) {
 		// used for creating same dir path structure as grammar
@@ -107,4 +104,5 @@ class GenerateTask extends DefaultTask {
 		}
 		return returnPath
 	}
+
 }
