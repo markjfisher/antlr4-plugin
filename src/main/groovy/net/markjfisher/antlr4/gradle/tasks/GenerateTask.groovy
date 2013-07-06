@@ -56,7 +56,7 @@ class GenerateTask extends AntlrBaseTask {
 				def grammarPackage = relativeDirPath.replaceAll(System.properties['file.separator'], '.')
 				// run antlr tool to generate the output
 				optionArgs = ["-o", "$outdir", "-package", grammarPackage, optionArgs, file.canonicalPath].flatten()
-				project.logger.quiet "running antlr\n - class   : $toolClass\n - path    : ${project.configurations.antlr4.files}\n - options : $optionArgs"
+				project.logger.debug "running antlr\n - class   : $toolClass\n - path    : ${project.configurations.antlr4.files}\n - options : $optionArgs"
 				new ByteArrayOutputStream().withStream { stream ->
 					project.javaexec {
 						main           = toolClass

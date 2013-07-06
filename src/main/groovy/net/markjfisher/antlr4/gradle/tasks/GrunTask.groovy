@@ -14,7 +14,7 @@ class GrunTask extends DefaultTask {
 			// split arguments by spaces or quotes, e.g. -Pargs='this "and that"'' -> ["this", "and that"]
 			optionArgs = (project.args =~ /([^\s"']+)|["']([^'"]*)["']/).collect{it[1] ?: it[2]}
 		}
-		println "running test rig:\n - class     : $grunClass\n - args      : $optionArgs"
+		project.logger.quiet "running test rig:\n - class     : $grunClass\n - args      : $optionArgs"
 		new ByteArrayOutputStream().withStream { stream ->
 			project.javaexec {
 				main           = grunClass
