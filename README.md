@@ -15,14 +15,14 @@ An example project is in the Antlr4Example subproject.
 The "antlr4" configuration block controls parameters used by the antlr4 compiler.
 All major flags should be supported through configuration.
 
-antrl4 {
-    tool {
-       "example.Expr" {
-           atn = true
-           ...
-       }
-    }
-}
+	antrl4 {
+	    tool {
+	       "example.Expr" {
+	           atn = true
+	           ...
+	       }
+	    }
+	}
 
 See Antlr4ToolOptions for supported flags.
 
