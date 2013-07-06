@@ -1,29 +1,24 @@
 apply plugin: 'java'
-apply plugin: 'sublimeText'
 apply plugin: 'groovy'
+apply plugin: 'eclipse'
 
-apply plugin: 'ivy-publish'
-
-apply from: "$rootDir/lib/deps.gradle"
-apply from: "$rootDir/lib/globals.gradle"
 apply from: "$rootDir/lib/generated-files.gradle"
-apply from: "$rootDir/lib/sublime.gradle"
 
 group = "net.markjfisher.antlr4"
 version = "0.1"
 
-buildscript {
-	apply from: "$rootDir/lib/deps.gradle", to: buildscript
-	dependencies {
-		classpath 'us.phildop:gradle-sublimetext-plugin:0.5'
-	}
+repositories {
+	mavenCentral()
 }
 
 dependencies {
-	groovy "org.codehaus.groovy:groovy:1.8+"
-	compile 'org.antlr:antlr:4.0-rc-1-complete'
-	compile fileTree(
-		dir: GRADLE_LIB,
-		includes: ['**/*.jar']
-	)
+	compile "org.codehaus.groovy:groovy:1.8+"
+	compile gradleApi()
+	compile 'org.antlr:antlr4:4.0'
 }
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.6'
+	jarFile = "${rootDir}/wrapper/wrapper.jar"
+}
+

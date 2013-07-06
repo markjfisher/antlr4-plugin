@@ -1,13 +1,23 @@
 package net.markjfisher.antlr4.gradle
 
 class Antlr4ToolOptions {
-	// these can be set overridden with -Pkey=tool.value or config block:
+	def name
+
+	def Antlr4ToolOptions(name) {
+		this.name = name
+	}
+
+	// configure with named block for particular grammar:
 	// antrl4 {
 	//     tool {
-	//        atn = true
-	//        // ...
+	//        "example.Grammar" {
+	//            atn = true
+	//            // ...
+	//        }
 	//     }
 	// }
+	// or use command line values, which override above:
+	// -Ptool.example.Grammar.atn=true
 	def atn            = false
 	def encoding       = ""
 	def messageFormat  = ""

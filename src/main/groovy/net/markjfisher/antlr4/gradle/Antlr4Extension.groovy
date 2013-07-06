@@ -1,14 +1,14 @@
 package net.markjfisher.antlr4.gradle
 
 import org.gradle.api.NamedDomainObjectContainer
-import org.gradle.util.ConfigureUtil
 
 class Antlr4Extension {
 	NamedDomainObjectContainer<Antlr4SourceSet> sourceSets
-	Antlr4ToolOptions tool = new Antlr4ToolOptions()
+	NamedDomainObjectContainer<Antlr4ToolOptions> tool
 
-	Antlr4Extension(sourceSets) {
+	Antlr4Extension(sourceSets, tool) {
 		this.sourceSets = sourceSets
+		this.tool       = tool
 	}
 
 	def sourceSets(Closure c) {
@@ -16,6 +16,6 @@ class Antlr4Extension {
 	}
 
 	def tool(Closure c) {
-		ConfigureUtil.configure(c, tool)
+		tool.configure(c)
 	}
 }

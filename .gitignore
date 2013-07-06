@@ -2,4 +2,6 @@
 build/
 .settings
 bin/
-Antlr4Plugin.sublime-workspace
+*.sublime-workspace
+.classpath
+.project

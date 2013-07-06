@@ -3,6 +3,7 @@ package net.markjfisher.antlr4.gradle
 import java.util.Map
 
 import net.markjfisher.antlr4.gradle.tasks.GenerateTask
+import net.markjfisher.antlr4.gradle.tasks.GrunTask
 
 import org.gradle.api.Action
 import org.gradle.api.Plugin
@@ -30,13 +31,16 @@ class Antlr4Plugin implements Plugin<Project> {
 		def sourceSets = project.container(Antlr4SourceSet) { name ->
 			new Antlr4SourceSet(name, project)
 		}
+		def toolOptions = project.container(Antlr4ToolOptions) { name ->
+			new Antlr4ToolOptions(name)
+		}
 		project.configure(project) {
-			extensions.create(ANTLR4_EXTENSIONS_NAME, Antlr4Extension, sourceSets)
+			extensions.create(ANTLR4_EXTENSIONS_NAME, Antlr4Extension, sourceSets, toolOptions)
 		}
 	}
 
 	def applyConfigurations(project) {
-		project.configurations.add(ANTLR4_CONFIGURATIONS_NAME).with {
+		project.configurations.create(ANTLR4_CONFIGURATIONS_NAME).with {
 			visible = false
 			transitive = false
 			description = "Antlr4 libraries"
@@ -47,8 +51,15 @@ class Antlr4Plugin implements Plugin<Project> {
 	def addSources(project) {
 		project.with {
 			"$ANTLR4_SOURCESET_DIR" {
+				// create a tool group for default values
+				tool {
+					"default" {
+						listener = true
+						visitor = false
+					}
+				}
+				// create the default "main" source set
 				sourceSets {
-					// create the default "main" source set
 					main {}
 				}
 			}
@@ -59,10 +70,12 @@ class Antlr4Plugin implements Plugin<Project> {
 	}
 
 	def applyTasks(project) {
-		def generate = project.tasks.add(name: "generate", type: GenerateTask)
+		def generate = project.tasks.create(name: "generate", type: GenerateTask)
 		def compileJava = project.tasks.findByPath("compileJava")
 		compileJava.dependsOn(generate)
-	}
 
+		def grun = project.tasks.create(name: "grun", type: GrunTask)
+		grun.dependsOn(compileJava)
+	}
 
 }

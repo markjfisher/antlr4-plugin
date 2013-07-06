@@ -1,4 +1,0 @@
-ant.property(environment: 'env')
-if(!ant.properties['env.GRADLE_HOME']) throw new Exception('Please set $GRADLE_HOME')
-
-project.ext.GRADLE_LIB = new File(System.getenv()['GRADLE_HOME'], 'lib')

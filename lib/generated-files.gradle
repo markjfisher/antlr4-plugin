@@ -20,17 +20,3 @@ artifacts {
 	archives (sourcesJar) { type = 'source' }
 }
 
-publishing {
-	repositories {
-		add project.repositories.ivy
-		/* this is the hardcoded version: note, the path can't be set by "url" unlike the normal definition, which works!
-		ivy {
-			// url "/home/markf/ivy/repo/"
-			layout 'pattern', {
-				ivyPattern      "/home/markf/ivy/repo/[organisation]/[revision]/[module]/ivy.xml"
-				artifactPattern "/home/markf/ivy/repo/[organisation]/[revision]/[module]/[type]s/[artifact]-[revision](-[classifier]).[ext]"
-			}
-		}
-		*/
-	}
-}
