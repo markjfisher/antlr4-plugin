@@ -1,0 +1,8 @@
+.gradle/
+build/
+.settings
+bin/
+*.sublime-workspace
+repl-port
+.classpath
+.project

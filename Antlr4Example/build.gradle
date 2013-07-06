@@ -1,0 +1,55 @@
+buildscript {
+	dependencies {
+		// classpath 'net.markjfisher.antlr4:Antlr4Plugin:0.1'
+		classpath files("$projectDir/../build/classes/main")
+		classpath files("$projectDir/../build/resources/main")
+	}
+}
+
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+apply plugin: 'antlr4'
+
+group = "net.markjfisher.antlr4"
+version = "0.1"
+
+antlr4 {
+	tool {
+		"example.LabeledExpr" {
+			visitor = true
+			listener = false
+		}
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "org.codehaus.groovy:groovy:1.8+"
+	compile 'org.antlr:antlr4:4.0'
+	// need to make these recursively include libs, or rely on the compile path
+	antlr4 'org.antlr:antlr4:4.0'
+	antlr4 'org.antlr:antlr4-runtime:4.0'
+	antlr4 'org.antlr:antlr-runtime:3.5'
+	antlr4 'org.antlr:ST4:4.0.7'
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.6'
+	jarFile = "${rootDir}/wrapper/wrapper.jar"
+}
+
+task calc(type: JavaExec, dependsOn: classes) {
+	description = "Run antlr4 example calculator"
+	
+	if (project.hasProperty('args')) {
+		def calcArgs = (project.args =~ /([^\s"']+)|["']([^'"]*)["']/).collect{it[1] ?: it[2]}
+		args calcArgs
+	}
+
+	main = 'example.Calc'
+	classpath configurations.antlr4, configurations.compile, configurations.runtime, sourceSets.main.output
+	// project.sourceSets.main.compileClasspath.files.each { println it }
+}
