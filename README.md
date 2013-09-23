@@ -61,3 +61,15 @@ e.g.
 > -Ptool.example.Expr.listener=true
 
 would cause the build to generate a listener.
+
+## Running example project
+
+This is also documented in the example folder itself.
+
+> cd Antlr4Example
+> ./gradlew calc -Pargs="test.expr"
+> ...
+> :calc
+> 193
+> 17
+> 9

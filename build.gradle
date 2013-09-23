@@ -5,14 +5,16 @@ apply plugin: 'eclipse'
 apply from: "$rootDir/lib/generated-files.gradle"
 
 group = "net.markjfisher.antlr4"
-version = "0.1"
+version = "0.1.1"
+
+defaultTasks 'build'
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	compile "org.codehaus.groovy:groovy:1.8+"
+	compile "org.codehaus.groovy:groovy:1.8.9"
 	compile gradleApi()
 	compile 'org.antlr:antlr4:4.0'
 }

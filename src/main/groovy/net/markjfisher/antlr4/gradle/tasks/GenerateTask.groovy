@@ -49,8 +49,6 @@ class GenerateTask extends AntlrBaseTask {
 
 				def outdir = project.file("$buildPath/$relativeDirPath")
 				if (!addedSrcDirs.contains(outdir.canonicalPath)) {
-					// add this dir as a source dir for java compilation too
-					compileJava.setSource(outdir)
 					addedSrcDirs << outdir.canonicalPath
 				}
 				def grammarPackage = relativeDirPath.replaceAll(System.properties['file.separator'], '.')
@@ -66,6 +64,10 @@ class GenerateTask extends AntlrBaseTask {
 						// jvmArgs = ""
 					}
 				}
+			}
+			addedSrcDirs.each { outdir ->
+				compileJava.source(outdir)
+				compileJava.include("**/*.java")
 			}
 		}
 	}
