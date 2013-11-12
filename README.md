@@ -8,7 +8,7 @@ An example project is in the Antlr4Example subproject.
 
 ## Compiling
 
-> ./gradlew build
+    ./gradlew build
 
 ## Configuration
 
@@ -40,11 +40,11 @@ Generated classes by default go into build/antlr4-gen, but this is controlled by
 At the moment add typical configuration of build requires following elements
 
 	apply plugin: 'antlr4'
-	
+
 	dependencies {
 		compile "org.codehaus.groovy:groovy:1.8+"
 		compile 'org.antlr:antlr4:4.0'
-	
+
 		antlr4 'org.antlr:antlr4:4.0'
 		antlr4 'org.antlr:antlr4-runtime:4.0'
 		antlr4 'org.antlr:antlr-runtime:3.5'
@@ -58,7 +58,7 @@ As soon as I work out how to hook into the compile configuration, this will beco
 All options can be overridden with command line args.
 e.g.
 
-> -Ptool.example.Expr.listener=true
+    -Ptool.example.Expr.listener=true
 
 would cause the build to generate a listener.
 
@@ -66,13 +66,25 @@ would cause the build to generate a listener.
 
 This is also documented in the example folder itself.
 
-> cd Antlr4Example
-> ./gradlew calc -Pargs="test.expr"
-> ...
-> :calc
-> 193
-> 17
-> 9
+    cd Antlr4Example
+    ./gradlew calc -Pargs="test.expr"
+    ...
+
+    :calc
+    193
+    17
+    9
+
+## BUGS / Limitations
+
+* Grammar file has to be in same package as class using it.
+* Excessive dependencies for antlr4 configuration
+
+Both of these are due to my limited understanding of how Plugins work,
+and interact. The Grammar file limitation is manifesting itself through
+the deletion of the generated classes during the compileGroovy phase of
+the groovy plugin. The dependency bloat needs me to understand how to
+add sub-dependencies recursively.
 
 License
 -------
